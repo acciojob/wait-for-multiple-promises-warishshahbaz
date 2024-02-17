@@ -13,7 +13,7 @@ const addRow = (name, time) => {
 };
 
 // Add loading row by default
-addRow('loading...', 'loading...');
+addRow('Loading...', 'Loading...');
 
 // Promises
 const promise1 = new Promise((resolve) => {
