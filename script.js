@@ -50,4 +50,6 @@ Promise.all([promise1, promise2, promise3]).then((values) => {
   // Calculate and add total time taken
   const totalTime = values.reduce((acc, curr) => acc + curr, 0);
   addRow('Total', totalTime.toFixed(3));
+}).catch((err)=>{
+	 const tbody = document.getElementById('output').innerText = "something went wrong";
 });
