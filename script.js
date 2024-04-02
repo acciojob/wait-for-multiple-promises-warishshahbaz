@@ -5,6 +5,7 @@ const getRandomDelay = () => Math.floor(Math.random() * 3 + 1) * 1000;
 const addRow = (name, time) => {
   const tbody = document.getElementById('output');
   const newRow = document.createElement('tr');
+	newRow.className ="loading"
   newRow.innerHTML = `
     <td>${name}</td>
     <td>${time}</td>
