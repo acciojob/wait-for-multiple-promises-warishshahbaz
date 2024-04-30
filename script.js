@@ -1,56 +1,54 @@
-// Function to generate a random delay between 1 and 3 seconds
-const getRandomDelay = () => Math.floor(Math.random() * 3 + 1) * 1000;
-
-// Function to add a new row to the table
-const addRow = (name, time) => {
-  const tbody = document.getElementById('output');
-  const newRow = document.createElement('tr');
-	newRow.className ="loading"
-  newRow.innerHTML = `
-    <td>${name}</td>
-    <td>${time}</td>
-  `;
-  tbody.appendChild(newRow);
-};
-
-// Add loading row by default
-addRow('Loading...', 'Loading...');
-
-// Promises
-const promise1 = new Promise((resolve) => {
-  setTimeout(() => {
-    const time = getRandomDelay() / 1000;
-    resolve(time);
-  }, getRandomDelay());
-});
-
-const promise2 = new Promise((resolve) => {
-  setTimeout(() => {
-    const time = getRandomDelay() / 1000;
-    resolve(time);
-  }, getRandomDelay());
-});
-
-const promise3 = new Promise((resolve) => {
-  setTimeout(() => {
-    const time = getRandomDelay() / 1000;
-    resolve(time);
-  }, getRandomDelay());
-});
-
-// Resolve all promises and update the table
-Promise.all([promise1, promise2, promise3]).then((values) => {
-  // Remove loading row
-  document.getElementById('output').innerHTML = '';
-
-  // Add rows for each promise result
-  addRow('Promise 1', values[0]);
-  addRow('Promise 2', values[1]);
-  addRow('Promise 3', values[2]);
-
-  // Calculate and add total time taken
-  const totalTime = values.reduce((acc, curr) => acc + curr, 0);
-  addRow('Total', totalTime.toFixed(3));
-}).catch((err)=>{
-	 const tbody = document.getElementById('output').innerText = "something went wrong";
-});
+const res = document.getElementById("output");
+ 
+const promises = [
+  new Promise((resolve) => {
+    const time = Math.floor(Math.random() * 3 + 1) * 1000;
+    setTimeout(() => resolve({ name: "Promise 1", time: time / 1000 }), time);
+  }),
+  new Promise((resolve) => {
+    const time = Math.floor(Math.random() * 3 + 1) * 1000;
+    setTimeout(() => resolve({ name: "Promise 2", time: time / 1000 }), time);
+  }),
+  new Promise((resolve) => {
+    const time = Math.floor(Math.random() * 3 + 1) * 1000;
+    setTimeout(() => resolve({ name: "Promise 3", time: time / 1000 }), time);
+  }),
+];
+ 
+async function callFns() {
+  const start = new Date();
+  // Use Promise.all to wait for all Promises to resolve
+  res.innerHTML += `
+            <tr id="loading">
+                <td colspan=2>Loading...</td>
+            </tr>
+          `;
+  await Promise.all(promises)
+    .then((results) => {
+      res.innerHTML = ``;
+      // Log the array of results
+      results.forEach((e) => {
+        res.innerHTML += `
+            <tr>
+                <td>${e.name}</td>
+                <td>${e.time}</td>
+            </tr>
+          `;
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+ 
+  const end = new Date();
+ 
+  const timeInMillis = end - start;
+  res.innerHTML += `
+            <tr>
+                <td>Total</td>
+                <td>${timeInMillis / 1000}</td>
+            </tr>
+          `;
+}
+ 
+callFns();
